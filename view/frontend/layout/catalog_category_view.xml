@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      layout="2columns-left"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+	<body>
+		<!-- Update template and add ViewModel -->
+		<referenceBlock name="category.products.list" template="ECInternet_Pricing::catalog/product/list.phtml">
+			<arguments>
+				<argument name="view_model" xsi:type="object">ECInternet\Pricing\ViewModel\ProductPrice</argument>
+			</arguments>
+		</referenceBlock>
+	</body>
+</page>

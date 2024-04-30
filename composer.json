@@ -1,0 +1,22 @@
+{
+	"name": "ecinternet/pricing",
+	"version": "1.0.0",
+	"description": "N/A",
+	"type": "magento2-module",
+	"require": {
+		"magento/module-customer": "*",
+		"magento/framework": "*",
+		"ecinternet/base": "1.3.4.*"
+	},
+	"license": [
+		"Proprietary"
+	],
+	"autoload": {
+		"files": [
+			"registration.php"
+		],
+		"psr-4": {
+			"ECInternet\\Pricing\\": ""
+		}
+	}
+}
