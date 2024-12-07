@@ -9,6 +9,7 @@ namespace ECInternet\Pricing\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\View\Layout;
 
 /**
  * Observer for 'layout_generate_blocks_after' event
@@ -22,8 +23,8 @@ class LayoutGenerateBlocksAfter implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        if ($this->shouldRemoveBlock($observer)) {
-            if ($layout = $observer->getData('layout')) {
+        if ($layout = $observer->getData('layout')) {
+            if ($this->shouldRemoveBlock($layout)) {
                 $layout->unsetElement('product.price.final');
             }
         }
@@ -32,14 +33,11 @@ class LayoutGenerateBlocksAfter implements ObserverInterface
     /**
      * @return bool
      */
-    private function shouldRemoveBlock(Observer $observer)
+    private function shouldRemoveBlock(Layout $layout)
     {
-        /** @var \Magento\Framework\View\Layout $layout */
-        if ($layout = $observer->getData('layout')) {
-            /** @var \ECInternet\Pricing\Block\Catalog\Product\View $customPricingBlock */
-            if ($customPricingBlock = $layout->getBlock('product.price.ecinternet-pricing')) {
-                return $customPricingBlock->hasCustomPrice();
-            }
+        /** @var \ECInternet\Pricing\Block\Catalog\Product\View $customPricingBlock */
+        if ($customPricingBlock = $layout->getBlock('product.price.ecinternet-pricing')) {
+            return $customPricingBlock->hasCustomPrice();
         }
 
         return false;

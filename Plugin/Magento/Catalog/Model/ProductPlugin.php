@@ -53,7 +53,7 @@ class ProductPlugin
         Product $subject,
         $result
     ) {
-        $this->log('afterGetPrice()', ['sku' => $subject->getSku(), 'result' => $result]);
+        //$this->log('afterGetPrice()', ['sku' => $subject->getSku(), 'result' => $result]);
 
         if ($this->helper->isModuleEnabled()) {
             $this->log('afterGetPrice() - ---------------------------------------');
@@ -65,6 +65,8 @@ class ProductPlugin
                 $this->log('afterGetPrice() - ---------------------------------------' . PHP_EOL);
 
                 return $price;
+            } else {
+                $this->log('afterGetPrice() - Unable to calculate custom price.');
             }
 
             $this->log('afterGetPrice() - Returning original price:', [$result]);

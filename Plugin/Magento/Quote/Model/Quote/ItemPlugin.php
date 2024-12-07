@@ -125,15 +125,10 @@ class ItemPlugin
     protected function getPrice(
         QuoteItem $quoteItem
     ) {
-        $this->log('getPrice()', ['sku' => $quoteItem->getSku()]);
-
         if ($pricingSystem = $this->helper->getPricingSystem()) {
-            $this->log('getPrice()', ['pricingSystem' => $pricingSystem->getName()]);
-
-            $price = $pricingSystem->getPriceForQuoteItem($quoteItem);
-            $this->log('getPrice()', ['price' => $price]);
-
-            return $price;
+            return $pricingSystem->getPriceForQuoteItem($quoteItem);
+        } else {
+            $this->log('getPrice() - Unable to determine pricing system.');
         }
 
         return null;

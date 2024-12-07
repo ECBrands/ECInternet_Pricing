@@ -56,10 +56,13 @@ class ProductPrice implements ArgumentInterface
         Product $product
     ) {
         if ($pricingSystem = $this->helper->getPricingSystem()) {
-            $this->log('getPrice()', ['pricingSystem' => $pricingSystem->getName()]);
-
             $price = $pricingSystem->getPrice($product->getSku());
-            $this->log('getPrice()', ['price' => $price]);
+
+            $this->log('getPriceHtml()', [
+                'sku'           => $product->getSku(),
+                'pricingSystem' => $pricingSystem->getName(),
+                'price'         => $price
+            ]);
 
             if ($price !== null) {
                 return $this->priceCurrency->convertAndFormat($price);
@@ -77,6 +80,6 @@ class ProductPrice implements ArgumentInterface
      */
     private function log(string $message, array $extra = [])
     {
-        $this->logger->info('Pricing/ViewModel/ProductPrice - ' . $message, $extra);
+        $this->logger->info('ViewModel/ProductPrice - ' . $message, $extra);
     }
 }

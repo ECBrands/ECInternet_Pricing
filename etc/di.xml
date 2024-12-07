@@ -13,14 +13,6 @@
 		/>
 	</type>
 
-	<!-- beforeGetVaryString() - Add 'customer_number' for unique identifier -->
-	<type name="Magento\Framework\App\Http\Context">
-		<plugin name="ecinternet_pricing-magento_framework_app_http_context_plugin"
-		        type="ECInternet\Pricing\Plugin\Magento\Framework\App\Http\ContextPlugin"
-		        disabled="true"
-		/>
-	</type>
-
 	<!-- afterGetPrice()    - Calls 'getPrice()' -->
 	<!-- afterGetRowTotal() - Calls 'getPrice()' -->
 	<type name="Magento\Quote\Model\Quote\Item">
