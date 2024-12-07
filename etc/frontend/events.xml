@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+	<!-- Just log for now -->
+	<event name="catalog_product_get_final_price">
+		<observer name="ecinternet_pricing-catalog_product_get_final_price"
+		          instance="ECInternet\Pricing\Observer\CatalogProductGetFinalPrice" />
+	</event>
+
+	<!-- Remove existing 'product.price.final' block if we're adding our own -->
+	<event name="layout_generate_blocks_after">
+		<observer name="ecinternet_pricing-layout_generate_blocks_after"
+		          instance="ECInternet\Pricing\Observer\LayoutGenerateBlocksAfter" />
+	</event>
+</config>
