@@ -10,6 +10,7 @@ namespace ECInternet\Pricing\Helper;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use ECInternet\Pricing\Api\PricingSystemPoolInterface;
+use ECInternet\Pricing\Model\Config;
 
 /**
  * Helper
@@ -18,48 +19,32 @@ use ECInternet\Pricing\Api\PricingSystemPoolInterface;
  */
 class Data extends AbstractHelper
 {
-    const CONFIG_PATH_ENABLED        = 'pricing/general/enable';
-
-    const CONFIG_PATH_PRICING_SYSTEM = 'pricing/system_maintenance/pricing_system';
-
     /**
      * @var \ECInternet\Pricing\Api\PricingSystemPoolInterface
      */
     private $pricingSystemPool;
 
     /**
+     * @var \ECInternet\Pricing\Model\Config
+     */
+    private $config;
+
+    /**
      * Data constructor.
      *
      * @param \Magento\Framework\App\Helper\Context              $context
      * @param \ECInternet\Pricing\Api\PricingSystemPoolInterface $pricingSystemPool
+     * @param \ECInternet\Pricing\Model\Config                   $config
      */
     public function __construct(
         Context $context,
-        PricingSystemPoolInterface $pricingSystemPool
+        PricingSystemPoolInterface $pricingSystemPool,
+        Config $config
     ) {
         parent::__construct($context);
 
         $this->pricingSystemPool = $pricingSystemPool;
-    }
-
-    /**
-     * Is module enabled?
-     *
-     * @return bool
-     */
-    public function isModuleEnabled()
-    {
-        return $this->scopeConfig->isSetFlag(self::CONFIG_PATH_ENABLED);
-    }
-
-    /**
-     * Get selected pricing system
-     *
-     * @return mixed
-     */
-    public function getPricingSystemSetting()
-    {
-        return $this->scopeConfig->getValue(self::CONFIG_PATH_PRICING_SYSTEM);
+        $this->config            = $config;
     }
 
     /**
@@ -67,7 +52,7 @@ class Data extends AbstractHelper
      */
     public function getPricingSystem()
     {
-        if ($pricingSystemSetting = $this->getPricingSystemSetting()) {
+        if ($pricingSystemSetting = $this->config->getPricingSystemSetting()) {
             return $this->pricingSystemPool->getPricingSystem($pricingSystemSetting);
         }
 

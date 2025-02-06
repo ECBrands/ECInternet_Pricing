@@ -25,6 +25,25 @@
 					<source_model>ECInternet\Pricing\Model\Config\Source\PricingSystem</source_model>
 				</field>
 			</group>
+			<group id="template_overrides" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+				<label>Template Overrides</label>
+				<field id="catalog_category_view" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Catalog Category View</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+				<field id="catalog_product_view" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Catalog Product View</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+				<field id="catalogsearch_advanced_result" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Advanced Search</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+				<field id="catalogsearch_result_index" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Search</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+			</group>
 		</section>
 	</system>
 </config>

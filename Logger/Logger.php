@@ -15,7 +15,7 @@ use Monolog\DateTimeImmutable;
  */
 class Logger extends \Monolog\Logger
 {
-    const CONFIG_PATH_DEBUG_LOGGING = 'pricing/general/debug_logging';
+    private const CONFIG_PATH_DEBUG_LOGGING = 'pricing/general/debug_logging';
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
