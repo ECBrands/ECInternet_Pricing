@@ -30,7 +30,7 @@ $_productCollection = $block->getLoadedProductCollection();
 $_helper = $block->getData('outputHelper');
 
 /** @var \ECInternet\Pricing\ViewModel\ProductPrice $viewModel */
-$viewModel = $block->getData('view_model');
+$viewModel = $block->getData('ecinternet_pricing_view_model');
 ?>
 
 <?php if (!$_productCollection->count()): ?>

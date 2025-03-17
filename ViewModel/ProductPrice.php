@@ -12,6 +12,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use ECInternet\Pricing\Helper\Data;
 use ECInternet\Pricing\Logger\Logger;
+use ECInternet\Pricing\Model\Config;
 
 class ProductPrice implements ArgumentInterface
 {
@@ -31,30 +32,44 @@ class ProductPrice implements ArgumentInterface
     private $logger;
 
     /**
+     * @var \ECInternet\Pricing\Model\Config
+     */
+    private $config;
+
+    /**
      * ProductPrice constructor.
      *
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \ECInternet\Pricing\Helper\Data                   $helper
      * @param \ECInternet\Pricing\Logger\Logger                 $logger
+     * @param \ECInternet\Pricing\Model\Config                  $config
      */
     public function __construct(
         PriceCurrencyInterface $priceCurrency,
         Data $helper,
-        Logger $logger
+        Logger $logger,
+        Config $config
     ) {
         $this->priceCurrency  = $priceCurrency;
         $this->helper         = $helper;
         $this->logger         = $logger;
+        $this->config         = $config;
     }
 
     /**
      * Get product price
+     *
+     * @param \Magento\Catalog\Model\Product $product
      *
      * @return string|null
      */
     public function getPriceHtml(
         Product $product
     ) {
+        if (!$this->config->isModuleEnabled()) {
+            return null;
+        }
+
         if ($pricingSystem = $this->helper->getPricingSystem()) {
             $price = $pricingSystem->getPrice($product->getSku());
 

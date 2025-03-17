@@ -10,6 +10,7 @@ namespace ECInternet\Pricing\Plugin\Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 use ECInternet\Pricing\Helper\Data;
 use ECInternet\Pricing\Logger\Logger;
+use ECInternet\Pricing\Model\Config;
 
 /**
  * Plugin for Magento\Quote\Model\Quote\Item
@@ -27,17 +28,25 @@ class ItemPlugin
     private $logger;
 
     /**
+     * @var \ECInternet\Pricing\Model\Config
+     */
+    private $config;
+
+    /**
      * ItemPlugin constructor.
      *
      * @param \ECInternet\Pricing\Helper\Data   $helper
      * @param \ECInternet\Pricing\Logger\Logger $logger
+     * @param \ECInternet\Pricing\Model\Config  $config
      */
     public function __construct(
         Data $helper,
-        Logger $logger
+        Logger $logger,
+        Config $config
     ) {
         $this->helper = $helper;
         $this->logger = $logger;
+        $this->config = $config;
     }
 
     /**
@@ -55,7 +64,7 @@ class ItemPlugin
     ) {
         $this->log('afterGetPrice()', ['sku' => $subject->getSku(), 'result' => $result]);
 
-        if ($this->helper->isModuleEnabled()) {
+        if ($this->config->isModuleEnabled()) {
             $this->log('afterGetPrice() - ---------------------------------------');
             $this->log('afterGetPrice()', ['sku' => $subject->getSku(), 'price' => $result]);
 
@@ -91,7 +100,7 @@ class ItemPlugin
     ) {
         $this->log('afterGetRowTotal()', ['sku' => $subject->getSku(), 'result' => $result]);
 
-        if ($this->helper->isModuleEnabled()) {
+        if ($this->config->isModuleEnabled()) {
             $this->log('afterGetRowTotal() - ---------------------------------------');
             $this->log('afterGetRowTotal()', ['sku' => $subject->getSku(), 'rowTotal' => $result]);
 

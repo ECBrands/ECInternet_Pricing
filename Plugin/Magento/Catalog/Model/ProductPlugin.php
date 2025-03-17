@@ -10,6 +10,7 @@ namespace ECInternet\Pricing\Plugin\Magento\Catalog\Model;
 use Magento\Catalog\Model\Product;
 use ECInternet\Pricing\Helper\Data;
 use ECInternet\Pricing\Logger\Logger;
+use ECInternet\Pricing\Model\Config;
 
 /**
  * Plugin for Magento\Catalog\Model\Product
@@ -27,17 +28,25 @@ class ProductPlugin
     private $logger;
 
     /**
+     * @var \ECInternet\Pricing\Model\Config
+     */
+    private $config;
+
+    /**
      * ProductPlugin constructor.
      *
      * @param \ECInternet\Pricing\Helper\Data   $helper
      * @param \ECInternet\Pricing\Logger\Logger $logger
+     * @param \ECInternet\Pricing\Model\Config  $config
      */
     public function __construct(
         Data $helper,
-        Logger $logger
+        Logger $logger,
+        Config $config
     ) {
         $this->helper = $helper;
         $this->logger = $logger;
+        $this->config = $config;
     }
 
     /**
@@ -53,27 +62,35 @@ class ProductPlugin
         Product $subject,
         $result
     ) {
-        //$this->log('afterGetPrice()', ['sku' => $subject->getSku(), 'result' => $result]);
-
-        if ($this->helper->isModuleEnabled()) {
-            $this->log('afterGetPrice() - ---------------------------------------');
-            $this->log('afterGetPrice()', ['sku' => $subject->getSku(), 'price' => $result]);
-
-            $price = $this->getPrice($subject->getSku());
-            if ($price !== null) {
-                $this->log('afterGetPrice() - Returning custom price:', [$price]);
-                $this->log('afterGetPrice() - ---------------------------------------' . PHP_EOL);
-
-                return $price;
-            } else {
-                $this->log('afterGetPrice() - Unable to calculate custom price.');
-            }
-
-            $this->log('afterGetPrice() - Returning original price:', [$result]);
-            $this->log('afterGetPrice() - ---------------------------------------' . PHP_EOL);
+        if (!$this->config->isModuleEnabled()) {
+            return $result;
         }
 
-        return $result;
+        // Cache sku
+        $sku = $subject->getSku();
+        if (!$sku) {
+            $this->log('afterGetPrice() - Unable to determine SKU.', ['product' => $subject->getData()]);
+            return $result;
+        }
+
+        // Start logging
+        $this->log('afterGetPrice() - ---------------------------------------');
+
+        $price = $this->getPrice($sku);
+        $this->log('afterGetPrice()', ['sku' => $sku, 'result' => $result, 'price' => $price]);
+
+        if ($price == null) {
+            $this->log('afterGetPrice() - Unable to calculate custom price.');
+            $this->log('afterGetPrice() - Returning original price:', [$result]);
+            $this->log('afterGetPrice() - ---------------------------------------' . PHP_EOL);
+
+            return $result;
+        }
+
+        $this->log('afterGetPrice() - Returning custom price:', [$price]);
+        $this->log('afterGetPrice() - ---------------------------------------' . PHP_EOL);
+
+        return $price;
     }
 
     /**

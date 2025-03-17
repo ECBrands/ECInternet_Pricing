@@ -22,6 +22,12 @@
 		/>
 	</type>
 
+	<!-- afterGetTemplate() - Modify templates for our price updates -->
+        <type name="Magento\Framework\View\Element\Template">
+            <plugin name="ecinternet_pricing-magento_framework_view_element_template_plugin"
+                    type="ECInternet\Pricing\Plugin\Magento\Framework\View\Element\TemplatePlugin" />
+        </type>
+
 	<!-- Custom Logger -->
 	<type name="ECInternet\Pricing\Logger\Logger">
 		<arguments>

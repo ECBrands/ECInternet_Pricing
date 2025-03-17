@@ -19,6 +19,7 @@ use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\Url\EncoderInterface as UrlEncoderInterface;
 use ECInternet\Pricing\Helper\Data;
 use ECInternet\Pricing\Logger\Logger;
+use ECInternet\Pricing\Model\Config;
 
 /**
  * Catalog Product View Block
@@ -36,21 +37,27 @@ class View extends \Magento\Catalog\Block\Product\View
     private $logger;
 
     /**
+     * @var \ECInternet\Pricing\Model\Config
+     */
+    private $config;
+
+    /**
      * View constructor.
      *
-     * @param \Magento\Catalog\Block\Product\Context                   $context
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface          $productRepository
-     * @param \Magento\Catalog\Helper\Product                          $productHelper
-     * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface      $productTypeConfig
-     * @param \Magento\Customer\Model\Session                          $customerSession
-     * @param \Magento\Framework\Json\EncoderInterface                 $jsonEncoder
-     * @param \Magento\Framework\Locale\FormatInterface                $localeFormat
-     * @param \Magento\Framework\Pricing\PriceCurrencyInterface        $priceCurrency
-     * @param \Magento\Framework\Stdlib\StringUtils                    $string
-     * @param \Magento\Framework\Url\EncoderInterface                  $urlEncoder
-     * @param \ECInternet\Pricing\Helper\Data                          $helper
-     * @param \ECInternet\Pricing\Logger\Logger                        $logger
-     * @param array                                                    $data
+     * @param \Magento\Catalog\Block\Product\Context              $context
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface     $productRepository
+     * @param \Magento\Catalog\Helper\Product                     $productHelper
+     * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
+     * @param \Magento\Customer\Model\Session                     $customerSession
+     * @param \Magento\Framework\Json\EncoderInterface            $jsonEncoder
+     * @param \Magento\Framework\Locale\FormatInterface           $localeFormat
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface   $priceCurrency
+     * @param \Magento\Framework\Stdlib\StringUtils               $string
+     * @param \Magento\Framework\Url\EncoderInterface             $urlEncoder
+     * @param \ECInternet\Pricing\Helper\Data                     $helper
+     * @param \ECInternet\Pricing\Logger\Logger                   $logger
+     * @param \ECInternet\Pricing\Model\Config                    $config
+     * @param array                                               $data
      */
     public function __construct(
         Context $context,
@@ -65,6 +72,7 @@ class View extends \Magento\Catalog\Block\Product\View
         UrlEncoderInterface $urlEncoder,
         Data $helper,
         Logger $logger,
+        Config $config,
         array $data = []
     ) {
         parent::__construct(
@@ -86,6 +94,12 @@ class View extends \Magento\Catalog\Block\Product\View
 
         $this->helper = $helper;
         $this->logger = $logger;
+        $this->config = $config;
+    }
+
+    public function shouldShowCustomPrice()
+    {
+        return $this->config->isModuleEnabled();
     }
 
     /**
@@ -93,6 +107,10 @@ class View extends \Magento\Catalog\Block\Product\View
      */
     public function getCustomPriceHtml()
     {
+        if (!$this->config->isModuleEnabled()) {
+            return '';
+        }
+
         if ($customPrice = $this->getCustomPrice()) {
             $this->log('getCustomPriceHtml()', ['customPrice' => $customPrice]);
 
@@ -117,9 +135,13 @@ class View extends \Magento\Catalog\Block\Product\View
      *
      * @return float|null
      */
-    public function getCustomPrice()
+    private function getCustomPrice()
     {
         $this->log('getCustomPrice()');
+
+        if (!$this->config->isModuleEnabled()) {
+            return null;
+        }
 
         if ($pricingSystem = $this->helper->getPricingSystem()) {
             if ($product = $this->getProduct()) {
@@ -132,7 +154,7 @@ class View extends \Magento\Catalog\Block\Product\View
         return null;
     }
 
-    public function log(string $message, array $extra = [])
+    private function log(string $message, array $extra = [])
     {
         $this->logger->info('Block/Catalog/Product/View - ' . $message, $extra);
     }

@@ -7,9 +7,10 @@ declare(strict_types=1);
 
 namespace ECInternet\Pricing\Observer;
 
-use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\View\Layout;
+use ECInternet\Pricing\Model\Config;
 
 /**
  * Observer for 'layout_generate_blocks_after' event
@@ -17,12 +18,33 @@ use Magento\Framework\View\Layout;
 class LayoutGenerateBlocksAfter implements ObserverInterface
 {
     /**
-     * Remove existing tier pricing block if we're adding our own tier price block
+     * @var \ECInternet\Pricing\Model\Config
+     */
+    private $config;
+
+    /**
+     * LayoutGenerateBlocksAfter constructor.
+     *
+     * @param \ECInternet\Pricing\Model\Config $config
+     */
+    public function __construct(
+        Config $config
+    ) {
+        $this->config = $config;
+    }
+
+    /**
+     * Remove existing price block if we're adding our own price block
      *
      * @param \Magento\Framework\Event\Observer $observer
      */
     public function execute(Observer $observer)
     {
+        if (!$this->config->isModuleEnabled()) {
+            return;
+        }
+
+        // Get the layout object
         if ($layout = $observer->getData('layout')) {
             if ($this->shouldRemoveBlock($layout)) {
                 $layout->unsetElement('product.price.final');
@@ -31,6 +53,8 @@ class LayoutGenerateBlocksAfter implements ObserverInterface
     }
 
     /**
+     * @param \Magento\Framework\View\Layout $layout
+     *
      * @return bool
      */
     private function shouldRemoveBlock(Layout $layout)
