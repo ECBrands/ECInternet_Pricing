@@ -9,7 +9,7 @@ namespace ECInternet\Pricing\Model;
 
 use ECInternet\Pricing\Api\PricingSystemPoolInterface;
 use ECInternet\Pricing\Api\Data\PricingSystemInterface;
-use ECInternet\Pricing\Logger\Logger;
+use Psr\Log\LoggerInterface;
 
 class PricingSystemPool implements PricingSystemPoolInterface
 {
@@ -19,18 +19,18 @@ class PricingSystemPool implements PricingSystemPoolInterface
     private $pricingSystems;
 
     /**
-     * @var \ECInternet\Pricing\Logger\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     private $logger;
 
     /**
      * PricingSystemPool constructor.
      *
-     * @param \ECInternet\Pricing\Logger\Logger $logger
-     * @param array                             $pricingSystems
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param array                    $pricingSystems
      */
     public function __construct(
-        Logger $logger,
+        LoggerInterface $logger,
         array $pricingSystems = []
     ) {
         $this->logger = $logger;
@@ -70,6 +70,6 @@ class PricingSystemPool implements PricingSystemPoolInterface
 
     private function log(string $message, array $extra = [])
     {
-        $this->logger->info('Model/PricingSystemPool - ' . $message, $extra);
+        $this->logger->info('[ECInternet_Pricing] Model/PricingSystemPool - ' . $message, $extra);
     }
 }

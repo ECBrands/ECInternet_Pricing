@@ -9,8 +9,8 @@ namespace ECInternet\Pricing\Plugin\Magento\Catalog\Model;
 
 use Magento\Catalog\Model\Product;
 use ECInternet\Pricing\Helper\Data;
-use ECInternet\Pricing\Logger\Logger;
 use ECInternet\Pricing\Model\Config;
+use Psr\Log\LoggerInterface;
 
 /**
  * Plugin for Magento\Catalog\Model\Product
@@ -23,30 +23,30 @@ class ProductPlugin
     private $helper;
 
     /**
-     * @var \ECInternet\Pricing\Logger\Logger
-     */
-    private $logger;
-
-    /**
      * @var \ECInternet\Pricing\Model\Config
      */
     private $config;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * ProductPlugin constructor.
      *
-     * @param \ECInternet\Pricing\Helper\Data   $helper
-     * @param \ECInternet\Pricing\Logger\Logger $logger
-     * @param \ECInternet\Pricing\Model\Config  $config
+     * @param \ECInternet\Pricing\Helper\Data  $helper
+     * @param \ECInternet\Pricing\Model\Config $config
+     * @param \Psr\Log\LoggerInterface         $logger
      */
     public function __construct(
         Data $helper,
-        Logger $logger,
-        Config $config
+        Config $config,
+        LoggerInterface $logger
     ) {
         $this->helper = $helper;
-        $this->logger = $logger;
         $this->config = $config;
+        $this->logger = $logger;
     }
 
     /**
@@ -118,6 +118,6 @@ class ProductPlugin
      */
     private function log(string $message, array $extra = [])
     {
-        $this->logger->info('Plugin/Magento/Catalog/Model/ProductPlugin - ' . $message, $extra);
+        $this->logger->info('[ECInternet_Pricing] Plugin/Magento/Catalog/Model/ProductPlugin - ' . $message, $extra);
     }
 }

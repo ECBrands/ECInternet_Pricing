@@ -27,14 +27,4 @@
         <plugin name="ecinternet_pricing-magento_framework_view_element_template_plugin"
                 type="ECInternet\Pricing\Plugin\Magento\Framework\View\Element\TemplatePlugin" />
     </type>
-
-	<!-- Custom Logger -->
-	<type name="ECInternet\Pricing\Logger\Logger">
-		<arguments>
-			<argument name="name" xsi:type="string">Pricing</argument>
-			<argument name="handlers" xsi:type="array">
-				<item name="system" xsi:type="object">ECInternet\Pricing\Logger\Handler</item>
-			</argument>
-		</arguments>
-	</type>
 </config>

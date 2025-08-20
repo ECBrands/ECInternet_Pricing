@@ -18,8 +18,8 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\Url\EncoderInterface as UrlEncoderInterface;
 use ECInternet\Pricing\Helper\Data;
-use ECInternet\Pricing\Logger\Logger;
 use ECInternet\Pricing\Model\Config;
+use Psr\Log\LoggerInterface;
 
 /**
  * Catalog Product View Block
@@ -32,14 +32,14 @@ class View extends \Magento\Catalog\Block\Product\View
     private $helper;
 
     /**
-     * @var \ECInternet\Pricing\Logger\Logger
-     */
-    private $logger;
-
-    /**
      * @var \ECInternet\Pricing\Model\Config
      */
     private $config;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
 
     /**
      * View constructor.
@@ -55,8 +55,8 @@ class View extends \Magento\Catalog\Block\Product\View
      * @param \Magento\Framework\Stdlib\StringUtils               $string
      * @param \Magento\Framework\Url\EncoderInterface             $urlEncoder
      * @param \ECInternet\Pricing\Helper\Data                     $helper
-     * @param \ECInternet\Pricing\Logger\Logger                   $logger
      * @param \ECInternet\Pricing\Model\Config                    $config
+     * @param \Psr\Log\LoggerInterface                            $logger
      * @param array                                               $data
      */
     public function __construct(
@@ -71,8 +71,8 @@ class View extends \Magento\Catalog\Block\Product\View
         StringUtils $string,
         UrlEncoderInterface $urlEncoder,
         Data $helper,
-        Logger $logger,
         Config $config,
+        LoggerInterface $logger,
         array $data = []
     ) {
         parent::__construct(
@@ -93,8 +93,8 @@ class View extends \Magento\Catalog\Block\Product\View
         //$this->_isScopePrivate = true;
 
         $this->helper = $helper;
-        $this->logger = $logger;
         $this->config = $config;
+        $this->logger = $logger;
     }
 
     public function shouldShowCustomPrice()
@@ -156,6 +156,6 @@ class View extends \Magento\Catalog\Block\Product\View
 
     private function log(string $message, array $extra = [])
     {
-        $this->logger->info('Block/Catalog/Product/View - ' . $message, $extra);
+        $this->logger->info('[ECInternet_Pricing] Block/Catalog/Product/View - ' . $message, $extra);
     }
 }

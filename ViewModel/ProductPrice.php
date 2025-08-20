@@ -11,8 +11,8 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use ECInternet\Pricing\Helper\Data;
-use ECInternet\Pricing\Logger\Logger;
 use ECInternet\Pricing\Model\Config;
+use Psr\Log\LoggerInterface;
 
 class ProductPrice implements ArgumentInterface
 {
@@ -27,33 +27,33 @@ class ProductPrice implements ArgumentInterface
     private $helper;
 
     /**
-     * @var \ECInternet\Pricing\Logger\Logger
-     */
-    private $logger;
-
-    /**
      * @var \ECInternet\Pricing\Model\Config
      */
     private $config;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
 
     /**
      * ProductPrice constructor.
      *
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \ECInternet\Pricing\Helper\Data                   $helper
-     * @param \ECInternet\Pricing\Logger\Logger                 $logger
      * @param \ECInternet\Pricing\Model\Config                  $config
+     * @param \Psr\Log\LoggerInterface                          $logger
      */
     public function __construct(
         PriceCurrencyInterface $priceCurrency,
         Data $helper,
-        Logger $logger,
-        Config $config
+        Config $config,
+        LoggerInterface $logger
     ) {
         $this->priceCurrency  = $priceCurrency;
         $this->helper         = $helper;
-        $this->logger         = $logger;
         $this->config         = $config;
+        $this->logger         = $logger;
     }
 
     /**
@@ -95,6 +95,6 @@ class ProductPrice implements ArgumentInterface
      */
     private function log(string $message, array $extra = [])
     {
-        $this->logger->info('ViewModel/ProductPrice - ' . $message, $extra);
+        $this->logger->info('[ECInternet_Pricing] ViewModel/ProductPrice - ' . $message, $extra);
     }
 }

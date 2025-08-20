@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace ECInternet\Pricing\Plugin\Magento\Framework\View\Element;
 
 use Magento\Framework\App\RequestInterface;
-use ECInternet\Pricing\Logger\Logger;
 use ECInternet\Pricing\Model\Config;
+use Psr\Log\LoggerInterface;
 
 class TemplatePlugin
 {
@@ -19,14 +19,14 @@ class TemplatePlugin
     private $request;
 
     /**
-     * @var \ECInternet\Pricing\Logger\Logger
-     */
-    private $logger;
-
-    /**
      * @var \ECInternet\Pricing\Model\Config
      */
     private $config;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
 
     /**
      * @var string
@@ -43,14 +43,21 @@ class TemplatePlugin
      */
     private $actionName;
 
+    /**
+     * TemplatePlugin constructor.
+     *
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @param \ECInternet\Pricing\Model\Config        $config
+     * @param \Psr\Log\LoggerInterface                $logger
+     */
     public function __construct(
         RequestInterface $request,
-        Logger $logger,
-        Config $config
+        Config $config,
+        LoggerInterface $logger
     ) {
         $this->request = $request;
-        $this->logger  = $logger;
         $this->config  = $config;
+        $this->logger  = $logger;
     }
 
     /**
@@ -122,6 +129,6 @@ class TemplatePlugin
 
     private function log(string $message, array $extra = [])
     {
-        $this->logger->info('TemplatePlugin - ' . $message, $extra);
+        $this->logger->info('[ECInternet_Pricing] TemplatePlugin - ' . $message, $extra);
     }
 }

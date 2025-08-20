@@ -9,8 +9,8 @@ namespace ECInternet\Pricing\Plugin\Magento\Quote\Model\Quote;
 
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 use ECInternet\Pricing\Helper\Data;
-use ECInternet\Pricing\Logger\Logger;
 use ECInternet\Pricing\Model\Config;
+use Psr\Log\LoggerInterface;
 
 /**
  * Plugin for Magento\Quote\Model\Quote\Item
@@ -23,30 +23,30 @@ class ItemPlugin
     private $helper;
 
     /**
-     * @var \ECInternet\Pricing\Logger\Logger
-     */
-    private $logger;
-
-    /**
      * @var \ECInternet\Pricing\Model\Config
      */
     private $config;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * ItemPlugin constructor.
      *
-     * @param \ECInternet\Pricing\Helper\Data   $helper
-     * @param \ECInternet\Pricing\Logger\Logger $logger
-     * @param \ECInternet\Pricing\Model\Config  $config
+     * @param \ECInternet\Pricing\Helper\Data  $helper
+     * @param \ECInternet\Pricing\Model\Config $config
+     * @param \Psr\Log\LoggerInterface         $logger
      */
     public function __construct(
         Data $helper,
-        Logger $logger,
-        Config $config
+        Config $config,
+        LoggerInterface $logger
     ) {
         $this->helper = $helper;
-        $this->logger = $logger;
         $this->config = $config;
+        $this->logger = $logger;
     }
 
     /**
@@ -153,6 +153,6 @@ class ItemPlugin
      */
     private function log(string $message, array $extra = [])
     {
-        $this->logger->info('Plugin/Magento/Quote/Model/Quote/ItemPlugin - ' . $message, $extra);
+        $this->logger->info('[ECInternet_Pricing] Plugin/Magento/Quote/Model/Quote/ItemPlugin - ' . $message, $extra);
     }
 }
