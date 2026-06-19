@@ -2,9 +2,10 @@
 	"name": "ecinternet/pricing",
 	"description": "EC Internet Pricing",
 	"require": {
+		"ecinternet/base": "2.4.7.x-dev",
+		"php": "~8.2.0||~8.3.0",
 		"magento/module-customer": "*",
-		"magento/framework": "*",
-		"ecinternet/base": "*"
+		"magento/framework": "*"
 	},
 	"type": "magento2-module",
 	"version": "1.0.0",
