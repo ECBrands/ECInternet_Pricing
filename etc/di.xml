@@ -7,24 +7,47 @@
 
 	<!-- afterGetPrice() - Overrides price with our logic -->
 	<type name="Magento\Catalog\Model\Product">
-		<plugin name="ecinternet_pricing-magento_catalog_model_product_plugin"
-		        type="ECInternet\Pricing\Plugin\Magento\Catalog\Model\ProductPlugin"
-		        disabled="false"
-		/>
+		<plugin name="ecinternet_pricing-magento_catalog_model_product"
+		        type="ECInternet\Pricing\Plugin\Magento\Catalog\Model\ProductPlugin" />
 	</type>
 
 	<!-- afterGetPrice()    - Calls 'getPrice()' -->
 	<!-- afterGetRowTotal() - Calls 'getPrice()' -->
 	<type name="Magento\Quote\Model\Quote\Item">
-		<plugin name="ecinternet_pricing-magento_quote_model_quote_item_plugin"
-		        type="ECInternet\Pricing\Plugin\Magento\Quote\Model\Quote\ItemPlugin"
-		        disabled="false"
-		/>
+		<plugin name="ecinternet_pricing-magento_quote_model_quote_item"
+		        type="ECInternet\Pricing\Plugin\Magento\Quote\Model\Quote\ItemPlugin" />
 	</type>
 
 	<!-- afterGetTemplate() - Modify templates for our price updates -->
-    <type name="Magento\Framework\View\Element\Template">
-        <plugin name="ecinternet_pricing-magento_framework_view_element_template_plugin"
-                type="ECInternet\Pricing\Plugin\Magento\Framework\View\Element\TemplatePlugin" />
-    </type>
+	<type name="Magento\Framework\View\Element\Template">
+		<plugin name="ecinternet_pricing-magento_framework_view_element_template"
+		        type="ECInternet\Pricing\Plugin\Magento\Framework\View\Element\TemplatePlugin" />
+	</type>
+
+	<!-- Custom Logger - Must be injected into each class which needs it -->
+	<virtualType name="ECInternetPricingLogger" type="Magento\Framework\Logger\Monolog">
+		<arguments>
+			<argument name="handlers" xsi:type="array">
+				<item name="info" xsi:type="object">ECInternet\Pricing\Logger\Handler</item>
+			</argument>
+		</arguments>
+	</virtualType>
+
+	<type name="ECInternet\Pricing\Plugin\Magento\Catalog\Model\ProductPlugin">
+		<arguments>
+			<argument name="logger" xsi:type="object">ECInternetPricingLogger</argument>
+		</arguments>
+	</type>
+
+	<type name="ECInternet\Pricing\Plugin\Magento\Quote\Model\Quote\ItemPlugin">
+		<arguments>
+			<argument name="logger" xsi:type="object">ECInternetPricingLogger</argument>
+		</arguments>
+	</type>
+
+	<type name="ECInternet\Pricing\Plugin\Magento\Framework\View\Element\TemplatePlugin">
+		<arguments>
+			<argument name="logger" xsi:type="object">ECInternetPricingLogger</argument>
+		</arguments>
+	</type>
 </config>
